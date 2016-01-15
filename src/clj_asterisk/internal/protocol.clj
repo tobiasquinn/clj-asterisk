@@ -66,7 +66,8 @@
    corresponding clojure hashmap."
   [lines]
   (log/info (str "Parsing " lines))
-  (let [packet (reduce #(process-line %1 %2) {} lines)]
+  (let [lines (filter (comp not end-of-command?) lines)
+        packet (reduce #(process-line %1 %2) {} lines)]
     (if (= (:Response packet) "Follows")
       {:Response "Success"
        :ActionID (:ActionID packet)
